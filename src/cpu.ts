@@ -3,9 +3,6 @@ import { Instructions } from './instructions';
 import { Memory } from './memory';
 import { Registers, Register } from './registers';
 
-/**
- * 8008 CPU: implement only control-group instructions as per ControlGroupInstructionsTest
- */
 export class CPU {
 	public state: CPUState;
 
