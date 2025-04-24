@@ -412,6 +412,40 @@ export class CPU {
 			nextState = instr.DCr(ddd);
 		}
 
+		// --- Rotate group ---------------------------------------
+
+		// RLC: (0,0,0,0,0,1,1,1) → 0x07
+		else if (
+			d7 === 0 && d6 === 0 && d5 === 0 && d4 === 0 &&
+			d3 === 0 && d2 === 1 && d1 === 1 && d0 === 1
+		) {
+			nextState = instr.RLC();
+		}
+
+		// RRC: (0,0,0,0,1,1,1,1) → 0x0F
+		else if (
+			d7 === 0 && d6 === 0 && d5 === 0 && d4 === 0 &&
+			d3 === 1 && d2 === 1 && d1 === 1 && d0 === 1
+		) {
+			nextState = instr.RRC();
+		}
+
+		// RAL: (0,0,0,1,0,1,1,1) → 0x17
+		else if (
+			d7 === 0 && d6 === 0 && d5 === 0 && d4 === 1 &&
+			d3 === 0 && d2 === 1 && d1 === 1 && d0 === 1
+		) {
+			nextState = instr.RAL();
+		}
+
+		// RAR: (0,0,0,1,1,1,1,1) → 0x1F
+		else if (
+			d7 === 0 && d6 === 0 && d5 === 0 && d4 === 1 &&
+			d3 === 1 && d2 === 1 && d1 === 1 && d0 === 1
+		) {
+			nextState = instr.RAR();
+		}
+
 
 		else {
 			throw new Error(`Opcode not implemented: 0x${opcode.toString(16)}`);
