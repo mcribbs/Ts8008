@@ -1,5 +1,3 @@
-// src/cpu.ts
-
 import { CPUState } from './cpuState';
 import { Instructions } from './instructions';
 import { Memory } from './memory';
@@ -40,7 +38,7 @@ export class CPU {
 		let nextState: CPUState;
 
 		// HLT: 00000000 or 11111111
-		if ((d7 | d6 | d5 | d4 | d3 | d2 | d1) === 0 || opcode === 0xff) {
+		if (opcode === 0x00 || opcode === 0xff) {
 			nextState = instr.HLT();
 		}
 

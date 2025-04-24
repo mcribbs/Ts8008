@@ -27,6 +27,9 @@ export class Memory {
 
 	readAddress(address: number): number {
     	// Little‑endian: low byte at address, high byte at address+1
+		if (address < 0 || address + 1 >= this.data.length) {
+			throw new RangeError(`Address out of bounds: ${address}`);
+		}
 		return ((this.data[address + 1] << 8) + this.data[address]);
 	}
 
