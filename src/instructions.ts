@@ -120,7 +120,8 @@ export class Instructions {
 				break;
 		}
 
-		const [res, carry] = f(sState.getRegister(Register.A), data);
+		const [res, carry] = f.call(this, sState.getRegister(Register.A), data);
+
 		return sState
 			.withRegister(Register.A, res)
 			.copy({
