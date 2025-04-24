@@ -35,11 +35,10 @@ export class Instructions {
 
 	CAL(test: boolean): CPUState {
 		if (test) {
-			const address = this.state.ram.readAddress(this.state.PC);
-			const afterFetch = this.state.incrementPC().incrementPC();
-			return afterFetch.copy({
-				stack: afterFetch.stack.push(address)
-			});
+			const target = this.state.ram.readAddress(this.state.PC);
+			const next = this.state.incrementPC().incrementPC();
+			const retAddr = next.PC;                  // address of instruction after the call
+			return next.copy({ stack: next.stack.push(retAddr).withPC(target) });
 		} else {
 			return this.state.incrementPC().incrementPC();
 		}
@@ -66,14 +65,17 @@ export class Instructions {
 
 	INr(dest: Register): CPUState {
 		const v = (this.state.getRegister(dest) + 1) & 0xff;
+		const base = Flags.calcZSP(v);
+		const merged = base.withFlag(Flag.C, this.state.flags.carry);
 		return this.state
 			.withRegister(dest, v)
-			.copy({ flags: Flags.calcZSP(v) });
+			.copy({ flags: merged });
 	}
 
 	DCr(dest: Register): CPUState {
 		const v = (this.state.getRegister(dest) - 1) & 0xff;
-		return this.state.withRegister(dest, v);
+		const newF = Flags.calcZSP(v).withFlag(Flag.C, this.state.flags.carry);
+		return this.state.withRegister(dest, v).copy({ flags: newF });
 	}
 
 	LrI(dest: Register): CPUState {
@@ -233,7 +235,8 @@ export class Instructions {
 	}
 
 	private compare(a: number, b: number): [number, boolean] {
-		const diff = a - b;
-		return [a, a < b];
+		const diff = (a - b) & 0xff;       // mask to 8 bits
+		const carry = a < b;               // borrow→carry flag
+		return [diff, carry];
 	}
 }
