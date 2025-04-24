@@ -218,6 +218,203 @@ export class CPU {
 			nextState = instr.LrI(ddd);
 		}
 
+		// --- Arithmetic group ---------------------------------------
+
+		// ADM: (1,0,0,0,0,1,1,1)
+		else if (
+			d7 === 1 && d6 === 0 &&
+			d5 === 0 && d4 === 0 && d3 === 0 &&
+			d2 === 1 && d1 === 1 && d0 === 1
+		) {
+			nextState = instr.ADM();
+		}
+
+		// ADI: (0,0,0,0,0,1,0,0)
+		else if (
+			d7 === 0 && d6 === 0 &&
+			d5 === 0 && d4 === 0 && d3 === 0 &&
+			d2 === 1 && d1 === 0 && d0 === 0
+		) {
+			nextState = instr.ADI();
+		}
+
+		// ADs: (1,0,0,0,0,_,_,_)  — add register
+		else if (d7 === 1 && d6 === 0 && d5 === 0 && d4 === 0 && d3 === 0) {
+			nextState = instr.ADr(sss);
+		}
+
+		// ACM: (1,0,0,0,1,1,1,1)
+		else if (
+			d7 === 1 && d6 === 0 &&
+			d5 === 0 && d4 === 0 && d3 === 1 &&
+			d2 === 1 && d1 === 1 && d0 === 1
+		) {
+			nextState = instr.ACM();
+		}
+
+		// ACI: (0,0,0,0,1,1,0,0)
+		else if (
+			d7 === 0 && d6 === 0 &&
+			d5 === 0 && d4 === 0 && d3 === 1 &&
+			d2 === 1 && d1 === 0 && d0 === 0
+		) {
+			nextState = instr.ACI();
+		}
+
+		// ACs: (1,0,0,0,1,_,_,_)  — add-with-carry register
+		else if (d7 === 1 && d6 === 0 && d5 === 0 && d4 === 0 && d3 === 1) {
+			nextState = instr.ACr(sss);
+		}
+
+		// SUM: (1,0,0,1,0,1,1,1)
+		else if (
+			d7 === 1 && d6 === 0 &&
+			d5 === 0 && d4 === 1 && d3 === 0 &&
+			d2 === 1 && d1 === 1 && d0 === 1
+		) {
+			nextState = instr.SUM();
+		}
+
+		// SUI: (0,0,0,1,0,1,0,0)
+		else if (
+			d7 === 0 && d6 === 0 &&
+			d5 === 0 && d4 === 1 && d3 === 0 &&
+			d2 === 1 && d1 === 0 && d0 === 0
+		) {
+			nextState = instr.SUI();
+		}
+
+		// SUs: (1,0,0,1,0,_,_,_)  — subtract register
+		else if (d7 === 1 && d6 === 0 && d5 === 0 && d4 === 1 && d3 === 0) {
+			nextState = instr.SUr(sss);
+		}
+
+		// SBM: (1,0,0,1,1,1,1,1)
+		else if (
+			d7 === 1 && d6 === 0 &&
+			d5 === 0 && d4 === 1 && d3 === 1 &&
+			d2 === 1 && d1 === 1 && d0 === 1
+		) {
+			nextState = instr.SBM();
+		}
+
+		// SBI: (0,0,0,1,1,1,0,0)
+		else if (
+			d7 === 0 && d6 === 0 &&
+			d5 === 0 && d4 === 1 && d3 === 1 &&
+			d2 === 1 && d1 === 0 && d0 === 0
+		) {
+			nextState = instr.SBI();
+		}
+
+		// SBs: (1,0,0,1,1,_,_,_)  — subtract-with-borrow register
+		else if (d7 === 1 && d6 === 0 && d5 === 0 && d4 === 1 && d3 === 1) {
+			nextState = instr.SBr(sss);
+		}
+
+		// NDM: (1,0,1,0,0,1,1,1)
+		else if (
+			d7 === 1 && d6 === 0 &&
+			d5 === 1 && d4 === 0 && d3 === 0 &&
+			d2 === 1 && d1 === 1 && d0 === 1
+		) {
+			nextState = instr.NDM();
+		}
+
+		// NDI: (0,0,1,0,0,1,0,0)
+		else if (
+			d7 === 0 && d6 === 0 &&
+			d5 === 1 && d4 === 0 && d3 === 0 &&
+			d2 === 1 && d1 === 0 && d0 === 0
+		) {
+			nextState = instr.NDI();
+		}
+
+		// NDs: (1,0,1,0,0,_,_,_)  — AND register
+		else if (d7 === 1 && d6 === 0 && d5 === 1 && d4 === 0 && d3 === 0) {
+			nextState = instr.NDr(sss);
+		}
+
+		// XRM: (1,0,1,0,1,1,1,1)
+		else if (
+			d7 === 1 && d6 === 0 &&
+			d5 === 1 && d4 === 0 && d3 === 1 &&
+			d2 === 1 && d1 === 1 && d0 === 1
+		) {
+			nextState = instr.XRM();
+		}
+
+		// XRI: (0,0,1,0,1,1,0,0)
+		else if (
+			d7 === 0 && d6 === 0 &&
+			d5 === 1 && d4 === 0 && d3 === 1 &&
+			d2 === 1 && d1 === 0 && d0 === 0
+		) {
+			nextState = instr.XRI();
+		}
+
+		// XRs: (1,0,1,0,1,_,_,_)  — XOR register
+		else if (d7 === 1 && d6 === 0 && d5 === 1 && d4 === 0 && d3 === 1) {
+			nextState = instr.XRr(sss);
+		}
+
+		// ORM: (1,0,1,1,0,1,1,1)
+		else if (
+			d7 === 1 && d6 === 0 &&
+			d5 === 1 && d4 === 1 && d3 === 0 &&
+			d2 === 1 && d1 === 1 && d0 === 1
+		) {
+			nextState = instr.ORM();
+		}
+
+		// ORI: (0,0,1,1,0,1,0,0)
+		else if (
+			d7 === 0 && d6 === 0 &&
+			d5 === 1 && d4 === 1 && d3 === 0 &&
+			d2 === 1 && d1 === 0 && d0 === 0
+		) {
+			nextState = instr.ORI();
+		}
+
+		// ORs: (1,0,1,1,0,_,_,_)  — OR register
+		else if (d7 === 1 && d6 === 0 && d5 === 1 && d4 === 1 && d3 === 0) {
+			nextState = instr.ORr(sss);
+		}
+
+		// CPM: (1,0,1,1,1,1,1,1)
+		else if (
+			d7 === 1 && d6 === 0 &&
+			d5 === 1 && d4 === 1 && d3 === 1 &&
+			d2 === 1 && d1 === 1 && d0 === 1
+		) {
+			nextState = instr.CPM();
+		}
+
+		// CPI: (0,0,1,1,1,1,0,0)
+		else if (
+			d7 === 0 && d6 === 0 &&
+			d5 === 1 && d4 === 1 && d3 === 1 &&
+			d2 === 1 && d1 === 0 && d0 === 0
+		) {
+			nextState = instr.CPI();
+		}
+
+		// CPs: (1,0,1,1,1,_,_,_)  — compare register
+		else if (d7 === 1 && d6 === 0 && d5 === 1 && d4 === 1 && d3 === 1) {
+			nextState = instr.CPr(sss);
+		}
+
+		// INr: (0,0,_,_,_,0,0,0)  — increment register
+		else if (d7 === 0 && d6 === 0 && d2 === 0 && d1 === 0 && d0 === 0) {
+			nextState = instr.INr(ddd);
+		}
+
+		// DCr: (0,0,_,_,_,0,0,1)  — decrement register
+		else if (d7 === 0 && d6 === 0 && d2 === 0 && d1 === 0 && d0 === 1) {
+			nextState = instr.DCr(ddd);
+		}
+
+
 		else {
 			throw new Error(`Opcode not implemented: 0x${opcode.toString(16)}`);
 		}
