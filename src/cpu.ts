@@ -86,6 +86,103 @@ export class CPU {
 			nextState = instr.JMP(t1.flags.parity);
 		}
 
+		// Call and Return group
+
+		// CAL unconditional: (0,1,_,_,_,1,1,0)
+		else if (d7 === 0 && d6 === 1 && d2 === 1 && d1 === 1 && d0 === 0) {
+			nextState = instr.CAL(true);
+		}
+
+		// CFC: (0,1,0,0,0,0,1,0) – CALL if Carry false
+		else if (d7 === 0 && d6 === 1 && d5 === 0 && d4 === 0 && d3 === 0 && d2 === 0 && d1 === 1 && d0 === 0) {
+			nextState = instr.CAL(!t1.flags.carry);
+		}
+
+		// CFZ: (0,1,0,0,1,0,1,0) – CALL if Zero false
+		else if (d7 === 0 && d6 === 1 && d5 === 0 && d4 === 0 && d3 === 1 && d2 === 0 && d1 === 1 && d0 === 0) {
+			nextState = instr.CAL(!t1.flags.zero);
+		}
+
+		// CFS: (0,1,0,1,0,0,1,0) – CALL if Sign false
+		else if (d7 === 0 && d6 === 1 && d5 === 0 && d4 === 1 && d3 === 0 && d2 === 0 && d1 === 1 && d0 === 0) {
+			nextState = instr.CAL(!t1.flags.sign);
+		}
+
+		// CFP: (0,1,0,1,1,0,1,0) – CALL if Parity false
+		else if (d7 === 0 && d6 === 1 && d5 === 0 && d4 === 1 && d3 === 1 && d2 === 0 && d1 === 1 && d0 === 0) {
+			nextState = instr.CAL(!t1.flags.parity);
+		}
+
+		// CC:  (0,1,1,0,0,0,1,0) – CALL if Carry true
+		else if (d7 === 0 && d6 === 1 && d5 === 1 && d4 === 0 && d3 === 0 && d2 === 0 && d1 === 1 && d0 === 0) {
+			nextState = instr.CAL(t1.flags.carry);
+		}
+
+		// CZ:  (0,1,1,0,1,0,1,0) – CALL if Zero true
+		else if (d7 === 0 && d6 === 1 && d5 === 1 && d4 === 0 && d3 === 1 && d2 === 0 && d1 === 1 && d0 === 0) {
+			nextState = instr.CAL(t1.flags.zero);
+		}
+
+		// CS:  (0,1,1,1,0,0,1,0) – CALL if Sign true
+		else if (d7 === 0 && d6 === 1 && d5 === 1 && d4 === 1 && d3 === 0 && d2 === 0 && d1 === 1 && d0 === 0) {
+			nextState = instr.CAL(t1.flags.sign);
+		}
+
+		// CP:  (0,1,1,1,1,0,1,0) – CALL if Parity true
+		else if (d7 === 0 && d6 === 1 && d5 === 1 && d4 === 1 && d3 === 1 && d2 === 0 && d1 === 1 && d0 === 0) {
+			nextState = instr.CAL(t1.flags.parity);
+		}
+
+		// RET unconditional: (0,0,_,_,_,1,1,1)
+		else if (d7 === 0 && d6 === 0 && d2 === 1 && d1 === 1 && d0 === 1) {
+			nextState = instr.RET(true);
+		}
+
+		// RFC: (0,0,0,0,0,0,1,1) – RET if Carry false
+		else if (d7 === 0 && d6 === 0 && d5 === 0 && d4 === 0 && d3 === 0 && d2 === 0 && d1 === 1 && d0 === 1) {
+			nextState = instr.RET(!t1.flags.carry);
+		}
+
+		// RFZ: (0,0,0,0,1,0,1,1) – RET if Zero false
+		else if (d7 === 0 && d6 === 0 && d5 === 0 && d4 === 0 && d3 === 1 && d2 === 0 && d1 === 1 && d0 === 1) {
+			nextState = instr.RET(!t1.flags.zero);
+		}
+
+		// RFS: (0,0,0,1,0,0,1,1) – RET if Sign false
+		else if (d7 === 0 && d6 === 0 && d5 === 0 && d4 === 1 && d3 === 0 && d2 === 0 && d1 === 1 && d0 === 1) {
+			nextState = instr.RET(!t1.flags.sign);
+		}
+
+		// RFP: (0,0,0,1,1,0,1,1) – RET if Parity false
+		else if (d7 === 0 && d6 === 0 && d5 === 0 && d4 === 1 && d3 === 1 && d2 === 0 && d1 === 1 && d0 === 1) {
+			nextState = instr.RET(!t1.flags.parity);
+		}
+
+		// RC:  (0,0,1,0,0,0,1,1) – RET if Carry true
+		else if (d7 === 0 && d6 === 0 && d5 === 1 && d4 === 0 && d3 === 0 && d2 === 0 && d1 === 1 && d0 === 1) {
+			nextState = instr.RET(t1.flags.carry);
+		}
+
+		// RZ:  (0,0,1,0,1,0,1,1) – RET if Zero true
+		else if (d7 === 0 && d6 === 0 && d5 === 1 && d4 === 0 && d3 === 1 && d2 === 0 && d1 === 1 && d0 === 1) {
+			nextState = instr.RET(t1.flags.zero);
+		}
+
+		// RS:  (0,0,1,1,0,0,1,1) – RET if Sign true
+		else if (d7 === 0 && d6 === 0 && d5 === 1 && d4 === 1 && d3 === 0 && d2 === 0 && d1 === 1 && d0 === 1) {
+			nextState = instr.RET(t1.flags.sign);
+		}
+
+		// RP:  (0,0,1,1,1,0,1,1) – RET if Parity true
+		else if (d7 === 0 && d6 === 0 && d5 === 1 && d4 === 1 && d3 === 1 && d2 === 0 && d1 === 1 && d0 === 1) {
+			nextState = instr.RET(t1.flags.parity);
+		}
+
+		// RST: (0,0,_,_,_,1,0,1) – RST aaa
+		else if (d7 === 0 && d6 === 0 && d2 === 1 && d1 === 0 && d0 === 1) {
+			nextState = instr.RST(aaa);
+		}
+
 		else {
 			throw new Error(`Opcode not implemented: 0x${opcode.toString(16)}`);
 		}
