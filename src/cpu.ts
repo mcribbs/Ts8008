@@ -3,6 +3,7 @@
 import { CPUState } from './cpuState';
 import { Instructions } from './instructions';
 import { Memory } from './memory';
+import { Registers, Register } from './registers';
 
 /**
  * 8008 CPU: implement only control-group instructions as per ControlGroupInstructionsTest
@@ -32,6 +33,9 @@ export class CPU {
 		const d1 = (opcode & 0x02) >>> 1;
 		const d0 = (opcode & 0x01) >>> 0;
 		const aaa = (opcode & 0x38) >>> 3;
+		// Extract the “ddd” destination register (bits 5–3) and “sss” source register (bits 2–0):
+		const ddd: Register = Registers.decodeRegister((opcode & 0x38) >> 3);
+		const sss: Register = Registers.decodeRegister(opcode & 0x07);
 
 		let nextState: CPUState;
 
@@ -181,6 +185,37 @@ export class CPU {
 		// RST: (0,0,_,_,_,1,0,1) – RST aaa
 		else if (d7 === 0 && d6 === 0 && d2 === 1 && d1 === 0 && d0 === 1) {
 			nextState = instr.RST(aaa);
+		}
+
+		// --- Load group ---------------------------------------------
+
+		// LdM: (1,1,_,_,_,1,1,1) — load register from memory[HL]
+		else if (d7 === 1 && d6 === 1 && d2 === 1 && d1 === 1 && d0 === 1) {
+			nextState = instr.LrM(ddd);
+		}
+
+		// LMs: (1,1,1,1,1,_,_,_) — store register to memory[HL]
+		else if (d7 === 1 && d6 === 1 && d5 === 1 && d4 === 1 && d3 === 1) {
+			nextState = instr.LMr(sss);
+		}
+
+		// Lds: (1,1,_,_,_,_,_,_) — copy register-to-register
+		else if (d7 === 1 && d6 === 1) {
+			nextState = instr.Lrr(ddd, sss);
+		}
+
+		// LMI: (0,0,1,1,1,1,1,0) — load immediate into memory[HL]
+		else if (
+			d7 === 0 && d6 === 0 &&
+			d5 === 1 && d4 === 1 && d3 === 1 &&
+			d2 === 1 && d1 === 1 && d0 === 0
+		) {
+			nextState = instr.LMI();
+		}
+
+		// LdI: (0,0,_,_,_,1,1,0) — load immediate into register
+		else if (d7 === 0 && d6 === 0 && d2 === 1 && d1 === 1 && d0 === 0) {
+			nextState = instr.LrI(ddd);
 		}
 
 		else {
